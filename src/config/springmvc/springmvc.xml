@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 只需要扫描包中的 加Controller 注解 -->
+	<context:component-scan base-package="com.ljk.programmer.controller">
+	
+	</context:component-scan>
+
+	<!-- 启动 mvc 注解驱动,这样才能使注解有效 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	
+	<!-- 静态资源处理 -->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 
+	               配置视图解析器
+	               页面的前缀:prefix
+	               页面的后缀:suffix  
+	 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	
+	<!-- 后台访问拦截器 -->
+	
+	 <mvc:interceptors>
+		<mvc:interceptor>
+		    <!-- 拦截所有请求 -->
+			<mvc:mapping path="/**"/>
+			<!-- 下边资源不被拦截 -->
+			<!--<mvc:mapping path="/grade/*"/>-->
+			<mvc:exclude-mapping path="/system/login"/>
+			<mvc:exclude-mapping path="/system/get_capacha"/>
+			<mvc:exclude-mapping path="/h-ui/**"/>
+			<mvc:exclude-mapping path="/easyui/**"/>
+			<mvc:exclude-mapping path="/home-resources/**"/>
+			<mvc:exclude-mapping path="/home/**"/>
+			<bean class="com.ljk.programmer.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+</beans>
