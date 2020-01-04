@@ -230,7 +230,7 @@
 	</table> 
 	<!-- 工具栏 -->
 	<div id="toolbar">
-		
+		<c:if test="${userType == 1}">
 		<div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
 			<div style="float: left;" class="datagrid-btn-separator"></div>
 		<div style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
@@ -239,7 +239,7 @@
 		<div>
 			
 			<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
-			
+			</c:if>
 			年级名：<input id="search-name" class="easyui-textbox" />
 			<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
 		</div>

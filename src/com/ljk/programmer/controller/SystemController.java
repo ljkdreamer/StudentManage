@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ljk.programmer.entity.Student;
 import com.ljk.programmer.entity.User;
+import com.ljk.programmer.service.StudentService;
 import com.ljk.programmer.service.UserService;
+import com.ljk.programmer.util.BCrypt;
 import com.ljk.programmer.util.CpachaUtil;
 
 /**
@@ -33,6 +36,9 @@ import com.ljk.programmer.util.CpachaUtil;
 public class SystemController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private StudentService  studentService;
 	
 	//method:后边跟一个枚举类型,表示请求方式
 	//value:代表映射值
@@ -97,13 +103,14 @@ public class SystemController {
 		 request.setAttribute("loginCpacha", null);	
 		 if(type==1){//管理员
 			 //从数据库查找账户密码
-			 User findByUserName = userService.findByUserName(username);
+			 User findByUserName =userService.findByUserName(username);
 			 if(findByUserName==null){
 				 map.put("type", "error");
 				 map.put("msg", "该用户不存在");
 				 return map;
 			 }
-			 if(!password.equals(findByUserName.getPassword())){
+			 //使用BCypt加密,产生一个随机盐,加密后每一个盐不同,以至于最后生成的密码不一样,使用checkpw进行验证
+			 if(!BCrypt.checkpw(password,findByUserName.getPassword() )){
 				 map.put("type", "error");
 				 map.put("msg", "密码错误");
 				 return map;
@@ -111,9 +118,21 @@ public class SystemController {
 			 request.getSession().setAttribute("user", findByUserName);
 		 } if(type==2){
 			 //从数据库查找账户密码
-			
-		 }
+			 Student findByUserName = studentService.findByUserName(username);
+			 if(findByUserName==null){
+				 map.put("type", "error");
+				 map.put("msg", "该用户不存在");
+				 return map;
+			 }
+			 if(!BCrypt.checkpw(password,findByUserName.getPassword() )){
+				 map.put("type", "error");
+				 map.put("msg", "密码错误");
+				 return map;
+			 }
+			 request.getSession().setAttribute("user", findByUserName);
 		
+		 }
+		 request.getSession().setAttribute("userType", type);
 		 map.put("type", "success");
 		 map.put("msg", "登陆成功");
 		 return map;
@@ -140,6 +159,14 @@ public class SystemController {
 		}
 	}
 	
+	
+	
+    @RequestMapping(value="/loginOut",method=RequestMethod.GET)	
+	public void logout(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		request.getSession().setAttribute("user", null);
+		response.sendRedirect("login");
+	
+	}
 	
 	
 }

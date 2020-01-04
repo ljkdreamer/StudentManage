@@ -40,7 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object arg2) throws Exception {
 		String uri = req.getRequestURI();
 		System.out.println("进入登录拦截器,url:"+uri);
-		User user=(User)req.getSession().getAttribute("user");
+	    Object user=req.getSession().getAttribute("user");
 		if(user==null){
 			//ajax请求
 			if("XMLHttpRequest".equals("X-Requested-With")){

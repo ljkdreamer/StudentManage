@@ -97,5 +97,8 @@
 
   <!-- -多例 -->
 	<bean id="gson" class="com.google.gson.Gson" scope="prototype"></bean>
+	
+	
+	
 
 </beans>

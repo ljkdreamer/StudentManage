@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ljk.programmer.dao.UserDao;
 import com.ljk.programmer.entity.User;
 import com.ljk.programmer.service.UserService;
+import com.ljk.programmer.util.BCrypt;
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -23,7 +24,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int add(User user) {
-	
+		String gensalt = BCrypt.gensalt();
+		String hashpw = BCrypt.hashpw(user.getPassword(), gensalt);
+		user.setPassword(hashpw);
 		return userDao.add(user);
 	}
 
@@ -41,7 +44,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int eidt(User user) {
-		
+		String gensalt = BCrypt.gensalt();
+		String hashpw = BCrypt.hashpw(user.getPassword(), gensalt);
+		user.setPassword(hashpw);
 		return userDao.eidt(user);
 	}
 
