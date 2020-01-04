@@ -23,7 +23,7 @@ public class StringUtil {
 		return ret;
 	}
 	
-	
+	//文件的名字
 	public static String generateSn(String prefix,String suffix){
 		return prefix + new Date().getTime() + suffix;
 	}
